@@ -1,4 +1,3 @@
-
 package fr.afcepf.atod.wine.data.order.impl;
 
 import fr.afcepf.atod.vin.data.exception.WineErrorCode;
@@ -7,6 +6,7 @@ import fr.afcepf.atod.wine.data.impl.DaoGeneric;
 import fr.afcepf.atod.wine.data.order.api.IDaoOrder;
 import fr.afcepf.atod.wine.entity.Customer;
 import fr.afcepf.atod.wine.entity.Order;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +20,8 @@ public class DaoOrder extends DaoGeneric<Order, Integer> implements IDaoOrder {
     private static final String REQ_LIST_CMD_BYID = "SELECT DISTINCT(c) FROM Customer c "
             + "left join fetch c.orders as o left join fetch o.ordersDetail "
             + "WHERE c.id = :idCustomer";    
-    
+    private static final String REQORDERSBYCUSTOMER = "FROM Order o fetch left join FETCH o.customers WHERE o =:paramOrder";
+
     
     /*****************************************************
      *              Fin Requetes HQL                    
@@ -45,4 +46,14 @@ public class DaoOrder extends DaoGeneric<Order, Integer> implements IDaoOrder {
         return customer;
     }
     
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Order> getAllOrdersByCustomer(Customer customer) {
+		List<Order> liste = null;
+		liste = getSf().getCurrentSession().createQuery(REQORDERSBYCUSTOMER).setParameter("paramOrder", customer)
+				.list();
+		return liste;
+	}
 }
