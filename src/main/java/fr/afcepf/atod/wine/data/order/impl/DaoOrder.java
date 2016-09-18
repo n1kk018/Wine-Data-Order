@@ -50,7 +50,7 @@ public class DaoOrder extends DaoGeneric<Order, Integer> implements IDaoOrder {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Order> getAllOrdersByCustomer(Customer customer) {
+	public List<Order> getAllOrdersByCustomer(Customer customer) throws WineException{
 		List<Order> liste = null;
 		liste = getSf().getCurrentSession().createQuery(REQORDERSBYCUSTOMER).setParameter("paramOrder", customer)
 				.list();

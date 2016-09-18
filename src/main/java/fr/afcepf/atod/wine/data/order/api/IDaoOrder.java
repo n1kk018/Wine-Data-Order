@@ -26,6 +26,6 @@ public interface IDaoOrder extends IDaoGeneric<Order, Integer> {
      */
     Customer ordersCustomerById(Integer idCustumer) throws WineException;
 
-    List<Order> getAllOrdersByCustomer(Customer customer);
+    List<Order> getAllOrdersByCustomer(Customer customer) throws WineException;
 
 }
