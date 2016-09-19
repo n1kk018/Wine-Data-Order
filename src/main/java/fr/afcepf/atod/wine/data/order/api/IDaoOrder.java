@@ -9,6 +9,6 @@ import fr.afcepf.atod.wine.entity.Order;
 public interface IDaoOrder extends IDaoGeneric<Order, Integer> {
 
 	List<Order> getAllOrdersByCustomer(Customer customer);
-	
+	Order getLastOrderByCustomer(Customer customer);
 	
 }

@@ -18,8 +18,7 @@ public class DaoOrder extends DaoGeneric<Order, Integer> implements IDaoOrder {
 	/******************************************************
 	 * Requetes HQL
 	 ***************************************************/
-	private static final String REQORDERSBYCUSTOMER = "FROM Order o fetch left join FETCH o.customers WHERE o =:paramOrder";
-
+	private static final String REQORDERSBYCUSTOMER = "SELECT o FROM Order o WHERE o.customer.id = :idCustomer ORDER BY o.paidAt DESC";
 	/**
 	 * ********************************************** Fin Requetes
 	 * HQLREQORDERSBYCUSTOMER
@@ -29,8 +28,22 @@ public class DaoOrder extends DaoGeneric<Order, Integer> implements IDaoOrder {
 	@Override
 	public List<Order> getAllOrdersByCustomer(Customer customer) {
 		List<Order> liste = null;
-		liste = getSf().getCurrentSession().createQuery(REQORDERSBYCUSTOMER).setParameter("paramOrder", customer)
+		liste = getSf().getCurrentSession().createQuery(REQORDERSBYCUSTOMER).setParameter("idCustomer", customer.getId())
 				.list();
 		return liste;
+	}
+
+	@Override
+	public Order getLastOrderByCustomer(Customer customer) {
+		Order lastOrder = new Order();
+		@SuppressWarnings("unchecked")
+		List<Order> orders = getSf().getCurrentSession()
+				.createQuery(REQORDERSBYCUSTOMER)
+				.setParameter("idCustomer", customer.getId())
+				.list();
+		if(!orders.isEmpty()) {
+			lastOrder = orders.get(0);
+		}
+		return lastOrder;
 	}
 }
